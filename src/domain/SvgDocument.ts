@@ -7,9 +7,11 @@ export class SvgDocument {
   private widthValue: number;
   private heightValue: number;
   private readonly root = new Group('__internal_root__');
-  constructor(width = '800', height = '600') {
+  private readonly metadata: Map<string, string>;
+  constructor(width = '800', height = '600', attributes: Readonly<Record<string, string>> = {}) {
     this.widthValue = NumberValue.positive(width, 'canvas width');
     this.heightValue = NumberValue.positive(height, 'canvas height');
+    this.metadata = new Map(Object.entries(attributes));
   }
   get width(): string { return String(this.widthValue); }
   get height(): string { return String(this.heightValue); }
@@ -19,6 +21,11 @@ export class SvgDocument {
     const h = NumberValue.positive(height, 'canvas height');
     this.widthValue = w;
     this.heightValue = h;
+    this.metadata.delete('viewBox');
+  }
+  attributes(): Readonly<Record<string, string>> {
+    return { viewBox: `0 0 ${this.width} ${this.height}`, ...Object.fromEntries(this.metadata),
+      xmlns: 'http://www.w3.org/2000/svg', width: this.width, height: this.height };
   }
   all(): readonly Shape[] {
     const result: Shape[] = [];
@@ -126,7 +133,7 @@ export class SvgDocument {
     parent.insert(shape, front ? parent.children.length : 0);
   }
   clone(): SvgDocument {
-    const copy = new SvgDocument(this.width, this.height);
+    const copy = new SvgDocument(this.width, this.height, Object.fromEntries(this.metadata));
     const factory = new ShapeFactory();
     for (const child of this.children) copy.root.insert(factory.copy(child));
     return copy;
