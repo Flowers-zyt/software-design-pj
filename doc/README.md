@@ -1,0 +1,24 @@
+# PJ1 Phase 1：CLI SVG 编辑器
+
+## 架构方案（初始方案，开发开始时记录）
+
+采用 TypeScript 面向对象设计、一类一文件。模块分为 `domain`（图形树和约束）、`application`（命令、编辑事务和历史）、`infrastructure`（XML 与文件读写适配器）、`cli`（词法分析、分发和 REPL）。`main.ts` 负责组装。
+
+依赖方向：CLI → application → domain；infrastructure → application 的端口与 domain；domain 不依赖 Node.js、命令行或 XML 库。命令通过 Command 模式执行，图形通过 Composite 统一操作，撤销重做采用文档快照 Memento。
+
+仅命令分发器、图形工厂允许名字到实现的映射。当前显式注册，作为后续插件阶段待重构项；不实现阶段外的 box。
+
+预期变化点：增加命令、图形类型、文件格式或 GUI。分别集中在命令注册、图形工厂、Codec/FileStore 端口和应用层入口。阶段 1 采用全树快照，暂不为大型文档增量历史和完整 SVG/CSS 渲染体系设计插件框架。
+
+## 过程记录
+
+- 2026-10-20：读取本地任务说明，确认 TypeScript、Command、Composite、原子失败和 IO 后历史屏障等硬性要求；当前目录只有任务说明，无既有实现。
+- 先建立工程和架构方案，再分阶段实现图形模型、命令、文件适配器、CLI 及测试。开发由 Codex 执行，具体设计取舍、修订和验证结果将在后续真实发生时补充。
+
+## 一致性自查
+
+待实现完成后按实际代码补充。
+
+## 质量保证手段
+
+计划使用严格 TypeScript 检查、自动化命令集成测试、SVG round-trip 验证及真实 CLI 脚本回放。最终记录实际通过的检查，不把计划当作结果。
