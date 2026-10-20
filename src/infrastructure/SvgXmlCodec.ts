@@ -31,7 +31,6 @@ export class SvgXmlCodec implements SvgCodec {
     }
     const width = (attributes.width ?? viewBox?.[2] ?? '800').replace(/px$/u, '');
     const height = (attributes.height ?? viewBox?.[3] ?? '600').replace(/px$/u, '');
-    const document = new SvgDocument(width, height, attributes);
     // Reserve ALL explicit IDs before filling holes, including IDs later in the file.
     const reserved = new Set<string>();
     for (const element of this.descendants(root)) {
@@ -47,7 +46,7 @@ export class SvgXmlCodec implements SvgCodec {
     // Root transform has been flattened into imported geometry.
     const normalizedAttributes = { ...attributes };
     delete normalizedAttributes.transform;
-    const normalized = new SvgDocument(document.width, document.height, normalizedAttributes);
+    const normalized = new SvgDocument(width, height, normalizedAttributes);
     for (const element of this.elements(root)) {
       this.readShape(element, normalized, undefined, reserved, counters, warnings, transform, attributes);
     }

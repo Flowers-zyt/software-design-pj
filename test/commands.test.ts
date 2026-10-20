@@ -10,7 +10,7 @@ test('tokenizer preserves colors, quoted spaces, empty content, Unicode and Wind
   const tokenizer = new Tokenizer();
   assert.deepEqual(tokenizer.parse('  # comment'), []);
   assert.deepEqual(tokenizer.parse('create rect r 0 0 1 1 #fff'), ['create', 'rect', 'r', '0', '0', '1', '1', '#fff']);
-  assert.deepEqual(tokenizer.parse('set title text "开始 and \\"quotes\\""'.replaceAll('\\\\"', '\\"')), ['set', 'title', 'text', '开始 and "quotes"']);
+  assert.deepEqual(tokenizer.parse(String.raw`set title text "开始 and \"quotes\""`), ['set', 'title', 'text', '开始 and "quotes"']);
   assert.deepEqual(tokenizer.parse('set t text ""'), ['set', 't', 'text', '']);
   assert.deepEqual(tokenizer.parse('read "C:\\temp\\my file.svg"'), ['read', 'C:\\temp\\my file.svg']);
   assert.throws(() => tokenizer.parse('set t text "unfinished'), /unterminated/);

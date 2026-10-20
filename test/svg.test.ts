@@ -40,7 +40,7 @@ test('all built-ins, text entities, empty text and inherited group styles round-
     'init 300.5 200', 'create g scene', 'set scene fill #fff',
     'create rect r -1 2 3 4 in scene', 'create circle c 3 4 5 red in scene',
     'create ellipse e 6 7 8 9 blue in scene', 'create line l 1 2 3 4 black in scene',
-    'create text t 1 2 "中文 & <hello> \\"world\\"" in scene'.replaceAll('\\\\"', '\\"'),
+    String.raw`create text t 1 2 "中文 & <hello> \"world\"" in scene`,
     'create text empty 0 0 ""', 'set l stroke-width 2.5', 'save round trip.svg',
   ]) {
     // The final unquoted path deliberately fails without destroying state.

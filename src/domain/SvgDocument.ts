@@ -109,7 +109,8 @@ export class SvgDocument {
     if (parent === this.root) throw new Error(`cannot ungroup top-level container: ${id}`);
     const index = parent.indexOf(group);
     // Preserve inherited paint/presentation properties when removing the group.
-    const inherited = Object.entries(group.attributes()).filter(([key]) => key !== 'id' && !key.startsWith('data-'));
+    const inheritedNames = ['fill', 'stroke', 'stroke-width', 'font-size', 'font-family', 'font-weight', 'text-anchor', 'color'];
+    const inherited = Object.entries(group.attributes()).filter(([key]) => inheritedNames.includes(key));
     for (const child of group.children) {
       const attrs = { ...Object.fromEntries(inherited), ...child.attributes() };
       child.importAttributes(attrs);
