@@ -1,0 +1,17 @@
+@startuml
+skinparam componentStyle rectangle
+component "main.ts\ncomposition root" as Main
+component "cli\nTokenizer / Dispatcher / Repl" as CLI
+component "application\nEditor / Commands / History" as App
+component "application/ports\nFileStore / SvgCodec" as Ports
+component "domain\nShape / Group / SvgDocument" as Domain
+component "infrastructure\nNodeFileStore / SvgXmlCodec" as Infra
+Main --> CLI
+Main --> App
+Main --> Infra
+CLI --> App
+App --> Domain
+App --> Ports
+Infra ..> Ports : implements
+Infra --> Domain
+@enduml
